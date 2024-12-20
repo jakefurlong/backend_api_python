@@ -2,7 +2,7 @@ services:
   api:
     build:
       context: .
-        dockerfile: Dockerfile
+      dockerfile: Dockerfile
     image: fastapi_app:latest
     container_name: jakefurlong/fastapi_app:latest
     ports:
