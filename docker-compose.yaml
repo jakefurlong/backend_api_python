@@ -3,8 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: fastapi_app:latest
-    container_name: jakefurlong/fastapi_app:latest
+    # Updated image to push to Google Artifact Registry
+    image: us-west1-docker.pkg.dev/kubernetes-445209/backend-api-python/fastapi_app:latest
     ports:
       - "8000:8000"
     depends_on:
