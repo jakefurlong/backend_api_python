@@ -13,4 +13,4 @@ app.include_router(tasks.router)
 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to the Daily Checklist App!"}
+    return {"message": "Welcome to the Kuberentes Daily Workout!"}
