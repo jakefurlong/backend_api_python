@@ -1,0 +1,28 @@
+services:
+  api:
+    build:
+      context: .
+        dockerfile: Dockerfile
+    image: fastapi_app:latest
+    container_name: jakefurlong/fastapi_app:latest
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql://postgres:strongpassword@db:5432/taskdb
+
+  db:
+    image: postgres:latest
+    container_name: postgres_db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: strongpassword
+      POSTGRES_DB: taskdb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
