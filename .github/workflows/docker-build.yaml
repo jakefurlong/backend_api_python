@@ -11,13 +11,13 @@ env:
   REGION: us-west1
   GAR_LOCATION: us-west1-docker.pkg.dev/kubernetes-445209/backend-api-python/
 
-job:
+jobs:
   build-push-artifact:
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v3"
-
+        
       - id: "auth"
         uses: "google-github-actions/auth@v1"
         with:
@@ -26,16 +26,20 @@ job:
       - name: "Set up Cloud SDK"
         uses: "google-github-actions/setup-gcloud@v1"
 
-      - name: "Use gcloud CLI"
-        run: "gcloud info"
-
       - name: "Docker auth"
         run: |-
           gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
 
-      - name: Build image
-        run: docker-compose build . --tag ${{ env.GAR_LOCATION }}
-        working-directory: /app
+      # Install Docker Compose (if not already available)
+      - name: "Install Docker Compose"
+        run: |
+          curl -L "https://github.com/docker/compose/releases/download/v2.20.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          chmod +x /usr/local/bin/docker-compose
+          
+      # Build images with Docker Compose
+      - name: "Build images using Docker Compose"
+        run: docker-compose -f docker-compose.yaml build
 
-      - name: Push image
-        run: docker push ${{ env.GAR_LOCATION }}
+      # Push images to Google Artifact Registry
+      - name: "Push images using Docker Compose"
+        run: docker-compose -f docker-compose.yaml push
